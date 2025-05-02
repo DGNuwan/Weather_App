@@ -13,41 +13,71 @@ class Weatherapp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
+          
           leading: const Icon(Icons.cast),
           title: const Text('Weather App'),
+          backgroundColor: Colors.blue,
         ),
-        body: Center(
+        body:
+        
+        Container(
+
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/bg.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 165,
-                    width: 165,
-                    child: weatercard(),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
               Center(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 250,
-                      child: Carousel(),
+                      height: 165,
+                      width: 165,
+                      child: weatercard(),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
+              SizedBox(
+                height: 20,
+              ),
+
+
+
+           Column(
+  children: [
+    SizedBox(
+      height: 180, // adjust based on card height
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: [
+          UncontainedLayoutCard(index: 0, label: 'Monday'),
+          UncontainedLayoutCard(index: 1, label: 'Tuesday'),
+          UncontainedLayoutCard(index: 2, label: 'Wednesday'),
+          UncontainedLayoutCard(index: 3, label: 'Thursday'),
+          UncontainedLayoutCard(index: 4, label: 'Friday'),
+          UncontainedLayoutCard(index: 5, label: 'Saturday'),
+           UncontainedLayoutCard(index: 3, label: 'Thursday'),
+          UncontainedLayoutCard(index: 4, label: 'Friday'),
+          UncontainedLayoutCard(index: 5, label: 'Saturday'),
+        ],
+        
       ),
+    ),
+  ],
+),
+
+            ]
+      ),
+      ),
+    ),
     );
   }
 }
@@ -84,83 +114,28 @@ class _weatercardState extends State<weatercard> {
   }
 }
 
-class Carousel extends StatefulWidget {
-  const Carousel({super.key});
 
-  @override
-  State<Carousel> createState() => _CarouselState();
-}
+class UncontainedLayoutCard extends StatelessWidget {
+  const UncontainedLayoutCard({super.key, required this.index, required this.label});
 
-class _CarouselState extends State<Carousel> {
-  final CarouselController controller = CarouselController(initialItem: 1);
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  final int index;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
-   // final double height = MediaQuery.sizeOf(context).height;
-
-    return ListView(
-      children: <Widget>[
-        const SizedBox(height: 20),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 200),
-          child: CarouselView.weighted(
-            flexWeights: const <int>[3, 3, 3, 2, 1],
-            consumeMaxWeight: false,
-            children: CardInfo.values.map((CardInfo info) {
-              return ColoredBox(
-                color: info.backgroundColor,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(info.icon, color: info.color, size: 32.0),
-                      Text(
-                        info.label,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.clip,
-                        softWrap: false,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
+    return ColoredBox(
+      color: Colors.primaries[index % Colors.primaries.length].withOpacity(0.5),
+      child: Center(
+        child: Text(
+          label,
+          style: const TextStyle(color: Colors.white, fontSize: 20),
+          overflow: TextOverflow.clip,
+          softWrap: false,
         ),
-      ],
+      ),
     );
   }
 }
 
-enum CardInfo {
-  camera('Cameras', Icons.video_call, Color(0xff2354C7), Color(0xffECEFFD)),
-  lighting('Lighting', Icons.lightbulb, Color(0xff806C2A), Color(0xffFAEEDF)),
-  climate('Climate', Icons.thermostat, Color(0xffA44D2A), Color(0xffFAEDE7)),
-  wifi('Wifi', Icons.wifi, Color(0xff417345), Color(0xffE5F4E0)),
-  media('Media', Icons.library_music, Color(0xff2556C8), Color(0xffECEFFD)),
-  security(
-    'Security',
-    Icons.crisis_alert,
-    Color(0xff794C01),
-    Color(0xffFAEEDF),
-  ),
-  safety(
-    'Safety',
-    Icons.medical_services,
-    Color(0xff2251C5),
-    Color(0xffECEFFD),
-  ),
-  more('', Icons.add, Color(0xff201D1C), Color(0xffE3DFD8));
 
-  const CardInfo(this.label, this.icon, this.color, this.backgroundColor);
-  final String label;
-  final IconData icon;
-  final Color color;
-  final Color backgroundColor;
-}
+
